@@ -7,6 +7,8 @@
   <meta name="apple-mobile-web-app-title" content="Sizer" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>Position Sizer</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0b0f17" />
   <style>
     :root {
       --bg: #0b0f17;
@@ -962,7 +964,13 @@
     document.addEventListener('input', event => {
       if (event.target.closest('#calcView')) saveInputs();
     });
-
+	if ('serviceWorker' in navigator) {
+		window.addEventListener('load', () => {
+			navigator.serviceWorker.register('service-worker.js')
+			.catch(error => console.log('Service worker registration failed:', error));
+		});
+	}
+	
     loadProfiles();
     loadInputs();
     calculate();
