@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Sizer" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Position Sizer</title>
+  <style>
+    :root {
+      --bg: #0b0f17;
+      --panel: #121826;
+      --panel-2: #182033;
+      --text: #f5f7fb;
+      --muted: #98a2b3;
+      --border: #2a3448;
+      --accent: #7dd3fc;
+      --good: #86efac;
+      --warn: #fde68a;
+      --bad: #fca5a5;
+      --input: #0f1523;
+      --shadow: 0 18px 50px rgba(0,0,0,.35);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: radial-gradient(circle at top, #162033 0%, var(--bg) 45%, #070a10 100%);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      padding: env(safe-area-inset-top) 14px env(safe-area-inset-bottom);
+    }
+
+    .app {
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 14px 0 24px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin: 0;
+      letter-spacing: -0.03em;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 3px;
+    }
+
+    .pill {
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 12px;
+      position: sticky;
+      top: env(safe-area-inset-top);
+      z-index: 10;
+      backdrop-filter: blur(12px);
+      padding-top: 6px;
+    }
+
+    .tab {
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.05);
+      color: var(--muted);
+      border-radius: 14px;
+      padding: 12px;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .tab.active {
+      background: var(--accent);
+      color: #082032;
+      border-color: transparent;
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.025));
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 14px;
+      box-shadow: var(--shadow);
+      margin-bottom: 12px;
+    }
+
+    .card h2 {
+      margin: 0 0 12px;
+      font-size: 16px;
+      letter-spacing: -0.01em;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .grid.one { grid-template-columns: 1fr; }
+    .grid.three { grid-template-columns: 1fr 1fr 1fr; }
+
+    label {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: var(--input);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 12px;
+      font-size: 16px;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(125,211,252,.15);
+    }
+
+    .seg {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .seg button, button {
+      border: 1px solid var(--border);
+      background: var(--panel-2);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 12px;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .seg button.active {
+      background: var(--accent);
+      color: #082032;
+      border-color: transparent;
+    }
+
+    .button-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .primary {
+      background: var(--accent);
+      color: #082032;
+      border-color: transparent;
+    }
+
+    .danger {
+      background: rgba(252,165,165,.12);
+      color: var(--bad);
+      border-color: rgba(252,165,165,.35);
+    }
+
+    .result {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .metric {
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 12px;
+      min-height: 86px;
+    }
+
+    .metric.full { grid-column: 1 / -1; }
+
+    .metric .name {
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    .metric .value {
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+    }
+
+    .metric .small {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 5px;
+      line-height: 1.35;
+    }
+
+    .good { color: var(--good); }
+    .warn { color: var(--warn); }
+    .bad { color: var(--bad); }
+
+    .note {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+      margin-top: 10px;
+    }
+
+    .hidden { display: none !important; }
+
+    .symbol-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .symbol-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      background: rgba(255,255,255,.035);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 10px;
+      transition: transform .15s ease, opacity .15s ease, border-color .15s ease, background .15s ease;
+    }
+
+    .symbol-item.dragging {
+      opacity: .55;
+      border-color: var(--accent);
+      background: rgba(125,211,252,.10);
+    }
+
+    .symbol-item.drag-over {
+      transform: translateY(3px);
+      border-color: var(--accent);
+    }
+
+    .symbol-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .drag-handle {
+      width: 34px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      color: var(--muted);
+      font-size: 20px;
+      line-height: 1;
+      cursor: grab;
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .drag-handle:active { cursor: grabbing; }
+
+    .symbol-text {
+      min-width: 0;
+    }
+
+    .symbol-item strong { font-size: 14px; }
+    .symbol-item span { color: var(--muted); font-size: 12px; }
+
+    .mini-btn {
+      padding: 8px 10px;
+      font-size: 12px;
+      border-radius: 10px;
+      white-space: nowrap;
+    }
+
+    .footer-space { height: 24px; }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header>
+      <div>
+        <h1>Position Sizer</h1>
+        <div class="subtitle">Manual MT5-style risk calculator</div>
+      </div>
+      <div class="pill">iPhone web app</div>
+    </header>
+
+    <div class="tabs">
+      <button class="tab active" id="calcTab" onclick="showTab('calc')">Calculator</button>
+      <button class="tab" id="settingsTab" onclick="showTab('settings')">Symbols</button>
+    </div>
+
+    <section id="calcView">
+      <div class="card">
+        <h2>Trade setup</h2>
+        <div class="grid one">
+          <div>
+            <label for="symbolSelect">Symbol profile</label>
+            <select id="symbolSelect" onchange="onSymbolChange()"></select>
+          </div>
+          <div>
+            <label>Direction</label>
+            <div class="seg">
+              <button id="longBtn" class="active" onclick="setDirection('long')">Long</button>
+              <button id="shortBtn" onclick="setDirection('short')">Short</button>
+            </div>
+          </div>
+        </div>
+        <div class="grid" style="margin-top:10px;">
+          <div>
+            <label for="entry">Entry</label>
+            <input id="entry" type="number" inputmode="decimal" step="any" placeholder="e.g. 2350.50" oninput="calculate()" />
+          </div>
+          <div>
+            <label for="stop">Stop loss</label>
+            <input id="stop" type="number" inputmode="decimal" step="any" placeholder="e.g. 2342.00" oninput="calculate()" />
+          </div>
+          <div>
+            <label for="takeProfit">Take profit</label>
+            <input id="takeProfit" type="number" inputmode="decimal" step="any" placeholder="optional" oninput="calculate()" />
+          </div>
+          <div  style="display:none;">
+            <label for="commission">Commission / lot, round trip</label>
+            <input id="commission" type="number" inputmode="decimal" step="any" placeholder="0" oninput="calculate()" />
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Risk</h2>
+        <div class="grid">
+          <div>
+            <label for="accountSize">Account size</label>
+            <input id="accountSize" type="number" inputmode="decimal" step="any" value="100000" oninput="calculate()" />
+          </div>
+          <div>
+            <label for="riskPercent">Risk %</label>
+            <input id="riskPercent" type="number" inputmode="decimal" step="any" value="0.5" oninput="calculate()" />
+          </div>
+          <div  style="display:none;">
+            <label for="fixedRisk">Fixed $ risk override</label>
+            <input id="fixedRisk" type="number" inputmode="decimal" step="any" placeholder="optional" oninput="calculate()" />
+          </div>
+          <div  style="display:none;">
+            <label for="manualLots">Manual lots override</label>
+            <input id="manualLots" type="number" inputmode="decimal" step="any" placeholder="optional" oninput="calculate()" />
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Result</h2>
+        <div class="result">
+          <div class="metric full">
+            <div class="name">Position size</div>
+            <div class="value" id="lotsOut">—</div>
+            <div class="small" id="lotsNote">Enter entry and stop loss.</div>
+          </div>
+          <div class="metric">
+            <div class="name">Risk amount</div>
+            <div class="value" id="riskOut">—</div>
+            <div class="small" id="riskNote">Includes commission if entered.</div>
+          </div>
+          <div class="metric">
+            <div class="name">SL distance</div>
+            <div class="value" id="slOut">—</div>
+            <div class="small" id="slNote">Ticks / price distance</div>
+          </div>
+          <div class="metric">
+            <div class="name">Estimated margin</div>
+            <div class="value" id="marginOut">—</div>
+            <div class="small" id="marginNote">Estimate only.</div>
+          </div>
+          <div class="metric">
+            <div class="name">R multiple</div>
+            <div class="value" id="rOut">—</div>
+            <div class="small" id="rNote">Based on TP if supplied.</div>
+          </div>
+        </div>
+        <div class="note" id="warnings"></div>
+      </div>
+    </section>
+
+    <section id="settingsView" class="hidden">
+      <div class="card">
+        <h2>Symbol profile</h2>
+        <div class="grid">
+          <div>
+            <label for="profileSymbol">Symbol</label>
+            <input id="profileSymbol" placeholder="XAUUSD" />
+          </div>
+          <div>
+            <label for="profileName">Display name</label>
+            <input id="profileName" placeholder="Gold" />
+          </div>
+          <div>
+            <label for="contractSize">Contract size</label>
+            <input id="contractSize" type="number" inputmode="decimal" step="any" placeholder="100" />
+          </div>
+          <div>
+            <label for="tickSize">Tick size</label>
+            <input id="tickSize" type="number" inputmode="decimal" step="any" placeholder="0.01" />
+          </div>
+          <div>
+            <label for="tickValue">Tick value / 1 lot</label>
+            <input id="tickValue" type="number" inputmode="decimal" step="any" placeholder="1" />
+          </div>
+          <div>
+            <label for="leverage">Leverage</label>
+            <input id="leverage" type="number" inputmode="decimal" step="any" placeholder="100" />
+          </div>
+          <div>
+            <label for="minLot">Min lot</label>
+            <input id="minLot" type="number" inputmode="decimal" step="any" placeholder="0.01" />
+          </div>
+          <div>
+            <label for="maxLot">Max lot</label>
+            <input id="maxLot" type="number" inputmode="decimal" step="any" placeholder="50" />
+          </div>
+          <div>
+            <label for="lotStep">Lot step</label>
+            <input id="lotStep" type="number" inputmode="decimal" step="any" placeholder="0.01" />
+          </div>
+          <div>
+            <label for="profileCommission">Default commission / lot</label>
+            <input id="profileCommission" type="number" inputmode="decimal" step="any" placeholder="0" />
+          </div>
+        </div>
+        <div class="button-row">
+          <button class="primary" onclick="saveProfile()">Save profile</button>
+          <button onclick="clearProfileForm()">Clear</button>
+        </div>
+        <div class="note">Copy these from MT5: right-click symbol → Specification. Tick value should be for 1 lot in your account/profit currency.</div>
+      </div>
+
+      <div class="card">
+        <h2>Saved symbols</h2>
+        <div id="symbolList" class="symbol-list"></div>
+      </div>
+
+      <div class="card">
+        <h2>Backup / restore</h2>
+        <textarea id="jsonBox" placeholder="Exported profiles appear here"></textarea>
+        <div class="button-row">
+          <button onclick="exportProfiles()">Export JSON</button>
+          <button onclick="importProfiles()">Import JSON</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer-space"></div>
+  </main>
+
+  <script>
+    const STORAGE_KEY = 'iphonePositionSizerProfiles.v1';
+    const INPUT_KEY = 'iphonePositionSizerInputs.v1';
+
+    let direction = 'long';
+    let profiles = [];
+
+    const defaultProfiles = [
+      {
+        symbol: 'XAUUSD',
+        displayName: 'Gold example',
+        contractSize: 100,
+        tickSize: 0.01,
+        tickValue: 1,
+        minLot: 0.01,
+        maxLot: 50,
+        lotStep: 0.01,
+        leverage: 100,
+        commissionPerLot: 0
+      },
+      {
+        symbol: 'BTCUSD',
+        displayName: 'Bitcoin example',
+        contractSize: 1,
+        tickSize: 1,
+        tickValue: 1,
+        minLot: 0.01,
+        maxLot: 100,
+        lotStep: 0.01,
+        leverage: 10,
+        commissionPerLot: 0
+      },
+      {
+        symbol: 'US100',
+        displayName: 'Nasdaq example',
+        contractSize: 1,
+        tickSize: 0.1,
+        tickValue: 0.1,
+        minLot: 0.01,
+        maxLot: 100,
+        lotStep: 0.01,
+        leverage: 100,
+        commissionPerLot: 0
+      }
+    ];
+
+    function $(id) { return document.getElementById(id); }
+
+    function num(id) {
+      const value = parseFloat($(id).value);
+      return Number.isFinite(value) ? value : null;
+    }
+
+    function money(value) {
+      if (!Number.isFinite(value)) return '—';
+      return '$' + value.toLocaleString(undefined, { maximumFractionDigits: 2 });
+    }
+
+    function fmt(value, digits = 2) {
+      if (!Number.isFinite(value)) return '—';
+      return value.toLocaleString(undefined, { maximumFractionDigits: digits });
+    }
+
+    function loadProfiles() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        profiles = raw ? JSON.parse(raw) : defaultProfiles;
+        if (!Array.isArray(profiles) || profiles.length === 0) profiles = defaultProfiles;
+      } catch {
+        profiles = defaultProfiles;
+      }
+      saveProfiles();
+      renderProfiles();
+      populateSymbolSelect();
+    }
+
+    function saveProfiles() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(profiles));
+    }
+
+    function loadInputs() {
+      try {
+        const raw = localStorage.getItem(INPUT_KEY);
+        if (!raw) return;
+        const data = JSON.parse(raw);
+        ['entry','stop','takeProfit','commission','accountSize','riskPercent','fixedRisk','manualLots','symbolSelect'].forEach(id => {
+          if (data[id] !== undefined && $(id)) $(id).value = data[id];
+        });
+        if (data.direction) setDirection(data.direction, false);
+      } catch {}
+    }
+
+    function saveInputs() {
+      const data = {};
+      ['entry','stop','takeProfit','commission','accountSize','riskPercent','fixedRisk','manualLots','symbolSelect'].forEach(id => {
+        if ($(id)) data[id] = $(id).value;
+      });
+      data.direction = direction;
+      localStorage.setItem(INPUT_KEY, JSON.stringify(data));
+    }
+
+    function showTab(tab) {
+      const calc = tab === 'calc';
+      $('calcView').classList.toggle('hidden', !calc);
+      $('settingsView').classList.toggle('hidden', calc);
+      $('calcTab').classList.toggle('active', calc);
+      $('settingsTab').classList.toggle('active', !calc);
+    }
+
+    function setDirection(next, doCalc = true) {
+      direction = next;
+      $('longBtn').classList.toggle('active', next === 'long');
+      $('shortBtn').classList.toggle('active', next === 'short');
+      if (doCalc) calculate();
+    }
+
+    function populateSymbolSelect() {
+      const selected = $('symbolSelect').value;
+      $('symbolSelect').innerHTML = profiles.map((p, i) => {
+        const name = p.displayName ? `${p.symbol} — ${p.displayName}` : p.symbol;
+        return `<option value="${i}">${escapeHtml(name)}</option>`;
+      }).join('');
+      if (selected && profiles[selected]) $('symbolSelect').value = selected;
+      onSymbolChange(false);
+    }
+
+    function onSymbolChange(doCalc = true) {
+      const p = getProfile();
+      if (p) $('commission').value = p.commissionPerLot || 0;
+      if (doCalc) calculate();
+    }
+
+    function getProfile() {
+      const index = parseInt($('symbolSelect').value, 10);
+      return profiles[index] || profiles[0];
+    }
+
+    function calculate() {
+      const p = getProfile();
+      saveInputs();
+
+      const entry = num('entry');
+      const stop = num('stop');
+      const tp = num('takeProfit');
+      const accountSize = num('accountSize') || 0;
+      const riskPercent = num('riskPercent') || 0;
+      const fixedRisk = num('fixedRisk');
+      const manualLots = num('manualLots');
+      const commissionPerLot = num('commission') || 0;
+
+      const warnings = [];
+
+      if (!p) {
+        setEmpty('Create a symbol profile first.');
+        return;
+      }
+
+      if (!entry || !stop || entry <= 0 || stop <= 0 || entry === stop) {
+        setEmpty('Enter a valid entry and stop loss.');
+        return;
+      }
+
+      const slDistancePrice = Math.abs(entry - stop);
+      const slTicks = slDistancePrice / p.tickSize;
+      const lossPerLotBeforeCommission = slTicks * p.tickValue;
+      const lossPerLot = lossPerLotBeforeCommission + commissionPerLot;
+
+      if (!Number.isFinite(lossPerLot) || lossPerLot <= 0) {
+        setEmpty('Check tick size and tick value. Loss per lot is invalid.');
+        return;
+      }
+
+      const requestedRisk = fixedRisk && fixedRisk > 0 ? fixedRisk : accountSize * riskPercent / 100;
+      let rawLots = requestedRisk / lossPerLot;
+      let lots = manualLots && manualLots > 0 ? manualLots : rawLots;
+      let roundedLots = roundDownToStep(lots, p.lotStep);
+
+      if (!manualLots || manualLots <= 0) {
+        lots = roundedLots;
+      }
+
+      const actualRisk = lots * lossPerLot;
+      const notional = lots * p.contractSize * entry;
+      const margin = p.leverage > 0 ? notional / p.leverage : NaN;
+      const riskPctActual = accountSize > 0 ? actualRisk / accountSize * 100 : NaN;
+
+      let rMultiple = NaN;
+      if (tp && tp > 0) {
+        const rewardDistance = Math.abs(tp - entry);
+        rMultiple = rewardDistance / slDistancePrice;
+      }
+
+      if (direction === 'long' && stop >= entry) warnings.push('For a long trade, stop loss is usually below entry.');
+      if (direction === 'short' && stop <= entry) warnings.push('For a short trade, stop loss is usually above entry.');
+      if (tp && direction === 'long' && tp <= entry) warnings.push('For a long trade, take profit is usually above entry.');
+      if (tp && direction === 'short' && tp >= entry) warnings.push('For a short trade, take profit is usually below entry.');
+      if (lots < p.minLot) warnings.push(`Calculated lots are below min lot ${p.minLot}.`);
+      if (lots > p.maxLot) warnings.push(`Calculated lots exceed max lot ${p.maxLot}.`);
+      if (margin > accountSize && accountSize > 0) warnings.push('Estimated margin is higher than account size. Check leverage/margin rules.');
+      if (p.symbol.toLowerCase().includes('example')) warnings.push('This is an example profile. Replace it with your broker’s MT5 specs.');
+
+      $('lotsOut').textContent = fmt(lots, 4) + ' lots';
+      $('lotsNote').textContent = manualLots && manualLots > 0 ? 'Manual lot override is active.' : `Raw size ${fmt(rawLots, 4)}, rounded down to lot step ${p.lotStep}.`;
+
+      $('riskOut').textContent = money(actualRisk);
+      $('riskNote').textContent = Number.isFinite(riskPctActual) ? `${fmt(riskPctActual, 3)}% of account` : 'Risk % unavailable';
+
+      $('slOut').textContent = fmt(slTicks, 2);
+      $('slNote').textContent = `${fmt(slDistancePrice, 6)} price distance × ${fmt(p.tickValue, 4)} per tick`;
+
+      $('marginOut').textContent = money(margin);
+      $('marginNote').textContent = `Notional ${money(notional)} / leverage ${p.leverage || '—'}.`;
+
+      $('rOut').textContent = Number.isFinite(rMultiple) ? fmt(rMultiple, 2) + 'R' : '—';
+      $('rNote').textContent = Number.isFinite(rMultiple) ? `Reward distance / SL distance.` : 'Add TP to calculate R.';
+
+      $('warnings').innerHTML = warnings.length
+        ? warnings.map(w => `<div class="warn">⚠ ${escapeHtml(w)}</div>`).join('')
+        : '<span class="good">No obvious sizing warnings.</span>';
+    }
+
+    function setEmpty(message) {
+      $('lotsOut').textContent = '—';
+      $('lotsNote').textContent = message;
+      $('riskOut').textContent = '—';
+      $('riskNote').textContent = 'Includes commission if entered.';
+      $('slOut').textContent = '—';
+      $('slNote').textContent = 'Ticks / price distance';
+      $('marginOut').textContent = '—';
+      $('marginNote').textContent = 'Estimate only.';
+      $('rOut').textContent = '—';
+      $('rNote').textContent = 'Based on TP if supplied.';
+      $('warnings').textContent = '';
+    }
+
+    function roundDownToStep(value, step) {
+      if (!step || step <= 0) return value;
+      const precision = Math.max(0, (step.toString().split('.')[1] || '').length);
+      return Number((Math.floor(value / step) * step).toFixed(precision + 2));
+    }
+
+    function saveProfile() {
+      const profile = {
+        symbol: $('profileSymbol').value.trim().toUpperCase(),
+        displayName: $('profileName').value.trim(),
+        contractSize: parseFloat($('contractSize').value),
+        tickSize: parseFloat($('tickSize').value),
+        tickValue: parseFloat($('tickValue').value),
+        minLot: parseFloat($('minLot').value),
+        maxLot: parseFloat($('maxLot').value),
+        lotStep: parseFloat($('lotStep').value),
+        leverage: parseFloat($('leverage').value),
+        commissionPerLot: parseFloat($('profileCommission').value) || 0
+      };
+
+      const required = ['symbol','contractSize','tickSize','tickValue','minLot','maxLot','lotStep','leverage'];
+      const invalid = required.some(key => {
+        if (key === 'symbol') return !profile.symbol;
+        return !Number.isFinite(profile[key]) || profile[key] <= 0;
+      });
+
+      if (invalid) {
+        alert('Please fill symbol, contract size, tick size, tick value, min/max lot, lot step, and leverage.');
+        return;
+      }
+
+      const existing = profiles.findIndex(p => p.symbol === profile.symbol);
+      if (existing >= 0) profiles[existing] = profile;
+      else profiles.push(profile);
+
+      saveProfiles();
+      renderProfiles();
+      populateSymbolSelect();
+      const index = profiles.findIndex(p => p.symbol === profile.symbol);
+      $('symbolSelect').value = String(index);
+      clearProfileForm();
+      showTab('calc');
+      calculate();
+    }
+
+    function renderProfiles() {
+      if (!profiles.length) {
+        $('symbolList').innerHTML = '<div class="note">No saved symbols yet.</div>';
+        return;
+      }
+      $('symbolList').innerHTML = profiles.map((p, i) => `
+        <div class="symbol-item" data-index="${i}">
+          <div class="symbol-left">
+            <div class="drag-handle" draggable="true" aria-label="Drag ${escapeHtml(p.symbol)} to reorder">≡</div>
+            <div class="symbol-text">
+              <strong>${escapeHtml(p.symbol)}</strong><br />
+              <span>${escapeHtml(p.displayName || '')} · tick ${p.tickSize} / value ${p.tickValue} · step ${p.lotStep}</span>
+            </div>
+          </div>
+          <div style="display:flex; gap:6px;">
+            <button class="mini-btn" onclick="editProfile(${i})">Edit</button>
+            <button class="mini-btn danger" onclick="deleteProfile(${i})">Delete</button>
+          </div>
+        </div>
+      `).join('');
+      setupSymbolDragSort();
+    }
+
+    function setupSymbolDragSort() {
+      const list = $('symbolList');
+      let draggedIndex = null;
+      let draggedItem = null;
+
+      list.querySelectorAll('.drag-handle').forEach(handle => {
+        handle.addEventListener('dragstart', event => {
+          draggedItem = event.target.closest('.symbol-item');
+          draggedIndex = Number(draggedItem.dataset.index);
+          draggedItem.classList.add('dragging');
+          event.dataTransfer.effectAllowed = 'move';
+          event.dataTransfer.setData('text/plain', String(draggedIndex));
+        });
+
+        handle.addEventListener('dragend', () => {
+          clearDragStyles();
+          draggedIndex = null;
+          draggedItem = null;
+        });
+      });
+
+      list.querySelectorAll('.symbol-item').forEach(item => {
+        item.addEventListener('dragover', event => {
+          event.preventDefault();
+          if (!draggedItem || item === draggedItem) return;
+          item.classList.add('drag-over');
+        });
+
+        item.addEventListener('dragleave', () => item.classList.remove('drag-over'));
+
+        item.addEventListener('drop', event => {
+          event.preventDefault();
+          const targetIndex = Number(item.dataset.index);
+          if (Number.isFinite(draggedIndex) && Number.isFinite(targetIndex) && draggedIndex !== targetIndex) {
+            moveProfile(draggedIndex, targetIndex);
+          }
+        });
+      });
+
+      // iPhone/Safari touch support. Hold the ≡ handle, then drag up/down.
+      list.querySelectorAll('.drag-handle').forEach(handle => {
+        let startIndex = null;
+
+        handle.addEventListener('touchstart', event => {
+          const item = event.target.closest('.symbol-item');
+          startIndex = Number(item.dataset.index);
+          draggedItem = item;
+          draggedItem.classList.add('dragging');
+        }, { passive: true });
+
+        handle.addEventListener('touchmove', event => {
+          if (!draggedItem) return;
+          event.preventDefault();
+          const touch = event.touches[0];
+          const target = document.elementFromPoint(touch.clientX, touch.clientY)?.closest('.symbol-item');
+          clearDragOverStyles();
+          if (target && target !== draggedItem && list.contains(target)) {
+            target.classList.add('drag-over');
+          }
+        }, { passive: false });
+
+        handle.addEventListener('touchend', event => {
+          if (!draggedItem) return;
+          const touch = event.changedTouches[0];
+          const target = document.elementFromPoint(touch.clientX, touch.clientY)?.closest('.symbol-item');
+          if (target && target !== draggedItem && list.contains(target)) {
+            const targetIndex = Number(target.dataset.index);
+            if (Number.isFinite(startIndex) && Number.isFinite(targetIndex) && startIndex !== targetIndex) {
+              moveProfile(startIndex, targetIndex);
+            }
+          }
+          clearDragStyles();
+          draggedItem = null;
+          startIndex = null;
+        });
+
+        handle.addEventListener('touchcancel', () => {
+          clearDragStyles();
+          draggedItem = null;
+          startIndex = null;
+        });
+      });
+    }
+
+    function moveProfile(fromIndex, toIndex) {
+      const selectedSymbol = getProfile()?.symbol;
+      const [moved] = profiles.splice(fromIndex, 1);
+      profiles.splice(toIndex, 0, moved);
+      saveProfiles();
+      renderProfiles();
+      populateSymbolSelect();
+      const selectedIndex = profiles.findIndex(p => p.symbol === selectedSymbol);
+      if (selectedIndex >= 0) $('symbolSelect').value = String(selectedIndex);
+      calculate();
+    }
+
+    function clearDragOverStyles() {
+      document.querySelectorAll('.symbol-item.drag-over').forEach(item => item.classList.remove('drag-over'));
+    }
+
+    function clearDragStyles() {
+      document.querySelectorAll('.symbol-item.dragging, .symbol-item.drag-over').forEach(item => {
+        item.classList.remove('dragging', 'drag-over');
+      });
+    }
+
+    function editProfile(index) {
+      const p = profiles[index];
+      if (!p) return;
+      $('profileSymbol').value = p.symbol || '';
+      $('profileName').value = p.displayName || '';
+      $('contractSize').value = p.contractSize || '';
+      $('tickSize').value = p.tickSize || '';
+      $('tickValue').value = p.tickValue || '';
+      $('minLot').value = p.minLot || '';
+      $('maxLot').value = p.maxLot || '';
+      $('lotStep').value = p.lotStep || '';
+      $('leverage').value = p.leverage || '';
+      $('profileCommission').value = p.commissionPerLot || 0;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function deleteProfile(index) {
+      if (!confirm('Delete this symbol profile?')) return;
+      profiles.splice(index, 1);
+      saveProfiles();
+      renderProfiles();
+      populateSymbolSelect();
+      calculate();
+    }
+
+    function clearProfileForm() {
+      ['profileSymbol','profileName','contractSize','tickSize','tickValue','minLot','maxLot','lotStep','leverage','profileCommission'].forEach(id => $(id).value = '');
+    }
+
+    function exportProfiles() {
+      $('jsonBox').value = JSON.stringify(profiles, null, 2);
+    }
+
+    function importProfiles() {
+      try {
+        const imported = JSON.parse($('jsonBox').value);
+        if (!Array.isArray(imported)) throw new Error('JSON must be an array.');
+        profiles = imported;
+        saveProfiles();
+        renderProfiles();
+        populateSymbolSelect();
+        alert('Profiles imported.');
+      } catch (err) {
+        alert('Import failed: ' + err.message);
+      }
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    document.addEventListener('input', event => {
+      if (event.target.closest('#calcView')) saveInputs();
+    });
+
+    loadProfiles();
+    loadInputs();
+    calculate();
+  </script>
+</body>
+</html>
