@@ -407,6 +407,11 @@
             <div class="small" id="riskNote">Includes commission if entered.</div>
           </div>
           <div class="metric">
+            <div class="name">Estimated profit</div>
+            <div class="value" id="profitOut">—</div>
+            <div class="small" id="profitNote">Add TP to calculate profit.</div>
+          </div>
+          <div class="metric">
             <div class="name">SL distance</div>
             <div class="value" id="slOut">—</div>
             <div class="small" id="slNote">Ticks / price distance</div>
@@ -683,8 +688,13 @@
       const riskPctActual = accountSize > 0 ? actualRisk / accountSize * 100 : NaN;
 
       let rMultiple = NaN;
+      let estimatedProfit = NaN;
+      let rewardTicks = NaN;
+
       if (tp && tp > 0) {
         const rewardDistance = Math.abs(tp - entry);
+        rewardTicks = rewardDistance / p.tickSize;
+        estimatedProfit = rewardTicks * p.tickValue * lots;
         rMultiple = rewardDistance / slDistancePrice;
       }
 
@@ -702,6 +712,11 @@
 
       $('riskOut').textContent = money(actualRisk);
       $('riskNote').textContent = Number.isFinite(riskPctActual) ? `${fmt(riskPctActual, 3)}% of account` : 'Risk % unavailable';
+
+      $('profitOut').textContent = Number.isFinite(estimatedProfit) ? money(estimatedProfit) : '—';
+      $('profitNote').textContent = Number.isFinite(estimatedProfit)
+        ? `${fmt(rewardTicks, 2)} ticks × ${fmt(p.tickValue, 4)} tick value × ${fmt(lots, 4)} lots`
+        : 'Add TP to calculate profit.';
 
       $('slOut').textContent = fmt(slTicks, 2);
       $('slNote').textContent = `${fmt(slDistancePrice, 6)} price distance × ${fmt(p.tickValue, 4)} per tick`;
@@ -722,6 +737,8 @@
       $('lotsNote').textContent = message;
       $('riskOut').textContent = '—';
       $('riskNote').textContent = 'Includes commission if entered.';
+      $('profitOut').textContent = '—';
+      $('profitNote').textContent = 'Add TP to calculate profit.';
       $('slOut').textContent = '—';
       $('slNote').textContent = 'Ticks / price distance';
       $('marginOut').textContent = '—';
