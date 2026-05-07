@@ -1,4 +1,4 @@
-const CACHE_NAME = 'position-sizer-v2';
+const CACHE_NAME = 'position-sizer-v3';
 
 const APP_FILES = [
   '/',

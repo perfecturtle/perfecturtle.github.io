@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -22,12 +23,15 @@
       --warn: #fde68a;
       --bad: #fca5a5;
       --input: #0f1523;
-      --shadow: 0 18px 50px rgba(0,0,0,.35);
+      --shadow: 0 18px 50px rgba(0, 0, 0, .35);
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
-    html, body {
+    html,
+    body {
       margin: 0;
       min-height: 100%;
       background: radial-gradient(circle at top, #162033 0%, var(--bg) 45%, #070a10 100%);
@@ -68,7 +72,7 @@
 
     .pill {
       border: 1px solid var(--border);
-      background: rgba(255,255,255,.04);
+      background: rgba(255, 255, 255, .04);
       color: var(--muted);
       border-radius: 999px;
       padding: 7px 10px;
@@ -90,7 +94,7 @@
 
     .tab {
       border: 1px solid var(--border);
-      background: rgba(255,255,255,.05);
+      background: rgba(255, 255, 255, .05);
       color: var(--muted);
       border-radius: 14px;
       padding: 12px;
@@ -105,7 +109,7 @@
     }
 
     .card {
-      background: linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.025));
+      background: linear-gradient(180deg, rgba(255, 255, 255, .055), rgba(255, 255, 255, .025));
       border: 1px solid var(--border);
       border-radius: 22px;
       padding: 14px;
@@ -125,8 +129,13 @@
       gap: 10px;
     }
 
-    .grid.one { grid-template-columns: 1fr; }
-    .grid.three { grid-template-columns: 1fr 1fr 1fr; }
+    .grid.one {
+      grid-template-columns: 1fr;
+    }
+
+    .grid.three {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
 
     label {
       display: block;
@@ -135,7 +144,9 @@
       margin-bottom: 6px;
     }
 
-    input, select, textarea {
+    input,
+    select,
+    textarea {
       width: 100%;
       border: 1px solid var(--border);
       background: var(--input);
@@ -153,9 +164,11 @@
       font-size: 12px;
     }
 
-    input:focus, select:focus, textarea:focus {
+    input:focus,
+    select:focus,
+    textarea:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(125,211,252,.15);
+      box-shadow: 0 0 0 3px rgba(125, 211, 252, .15);
     }
 
     .seg {
@@ -164,7 +177,8 @@
       gap: 8px;
     }
 
-    .seg button, button {
+    .seg button,
+    button {
       border: 1px solid var(--border);
       background: var(--panel-2);
       color: var(--text);
@@ -194,9 +208,9 @@
     }
 
     .danger {
-      background: rgba(252,165,165,.12);
+      background: rgba(252, 165, 165, .12);
       color: var(--bad);
-      border-color: rgba(252,165,165,.35);
+      border-color: rgba(252, 165, 165, .35);
     }
 
     .result {
@@ -206,14 +220,16 @@
     }
 
     .metric {
-      background: rgba(255,255,255,.04);
+      background: rgba(255, 255, 255, .04);
       border: 1px solid var(--border);
       border-radius: 18px;
       padding: 12px;
       min-height: 86px;
     }
 
-    .metric.full { grid-column: 1 / -1; }
+    .metric.full {
+      grid-column: 1 / -1;
+    }
 
     .metric .name {
       color: var(--muted);
@@ -234,9 +250,17 @@
       line-height: 1.35;
     }
 
-    .good { color: var(--good); }
-    .warn { color: var(--warn); }
-    .bad { color: var(--bad); }
+    .good {
+      color: var(--good);
+    }
+
+    .warn {
+      color: var(--warn);
+    }
+
+    .bad {
+      color: var(--bad);
+    }
 
     .note {
       color: var(--muted);
@@ -245,7 +269,9 @@
       margin-top: 10px;
     }
 
-    .hidden { display: none !important; }
+    .hidden {
+      display: none !important;
+    }
 
     .symbol-list {
       display: grid;
@@ -258,7 +284,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 10px;
-      background: rgba(255,255,255,.035);
+      background: rgba(255, 255, 255, .035);
       border: 1px solid var(--border);
       border-radius: 14px;
       padding: 10px;
@@ -268,7 +294,7 @@
     .symbol-item.dragging {
       opacity: .55;
       border-color: var(--accent);
-      background: rgba(125,211,252,.10);
+      background: rgba(125, 211, 252, .10);
     }
 
     .symbol-item.drag-over {
@@ -291,7 +317,7 @@
       place-items: center;
       border-radius: 12px;
       border: 1px solid var(--border);
-      background: rgba(255,255,255,.04);
+      background: rgba(255, 255, 255, .04);
       color: var(--muted);
       font-size: 20px;
       line-height: 1;
@@ -301,14 +327,22 @@
       -webkit-user-select: none;
     }
 
-    .drag-handle:active { cursor: grabbing; }
+    .drag-handle:active {
+      cursor: grabbing;
+    }
 
     .symbol-text {
       min-width: 0;
     }
 
-    .symbol-item strong { font-size: 14px; }
-    .symbol-item span { color: var(--muted); font-size: 12px; }
+    .symbol-item strong {
+      font-size: 14px;
+    }
+
+    .symbol-item span {
+      color: var(--muted);
+      font-size: 12px;
+    }
 
     .mini-btn {
       padding: 8px 10px;
@@ -317,9 +351,12 @@
       white-space: nowrap;
     }
 
-    .footer-space { height: 24px; }
+    .footer-space {
+      height: 24px;
+    }
   </style>
 </head>
+
 <body>
   <main class="app">
     <header>
@@ -327,7 +364,6 @@
         <h1>Position Sizer</h1>
         <div class="subtitle">Manual MT5-style risk calculator</div>
       </div>
-      <div class="pill">iPhone web app</div>
     </header>
 
     <div class="tabs">
@@ -354,17 +390,18 @@
         <div class="grid" style="margin-top:10px;">
           <div>
             <label for="entry">Entry</label>
-            <input id="entry" type="number" inputmode="decimal" step="any" placeholder="e.g. 2350.50" oninput="calculate()" />
+            <input id="entry" type="number" inputmode="decimal" step="any" oninput="calculate()" />
           </div>
           <div>
             <label for="stop">Stop loss</label>
-            <input id="stop" type="number" inputmode="decimal" step="any" placeholder="e.g. 2342.00" oninput="calculate()" />
+            <input id="stop" type="number" inputmode="decimal" step="any" oninput="calculate()" />
           </div>
           <div>
             <label for="takeProfit">Take profit</label>
-            <input id="takeProfit" type="number" inputmode="decimal" step="any" placeholder="optional" oninput="calculate()" />
+            <input id="takeProfit" type="number" inputmode="decimal" step="any" placeholder="optional"
+              oninput="calculate()" />
           </div>
-          <div  style="display:none;">
+          <div style="display:none;">
             <label for="commission">Commission / lot, round trip</label>
             <input id="commission" type="number" inputmode="decimal" step="any" placeholder="0" oninput="calculate()" />
           </div>
@@ -376,19 +413,19 @@
         <div class="grid">
           <div>
             <label for="accountSize">Account size</label>
-            <input id="accountSize" type="number" inputmode="decimal" step="any" value="100000" oninput="calculate()" />
+            <input id="accountSize" type="number" inputmode="decimal" step="any" value="200000" oninput="calculate()" />
+          </div>
+          <input id="riskPercent" type="number" inputmode="decimal" step="any" value="0.5"
+            oninput="$('manualLots').value=''; calculate()" />
+          <div style="display:none;">
+            <label for="fixedRisk">Fixed $ risk override</label>
+            <input id="fixedRisk" type="number" inputmode="decimal" step="any" placeholder="optional"
+              oninput="calculate()" />
           </div>
           <div>
-            <label for="riskPercent">Risk %</label>
-            <input id="riskPercent" type="number" inputmode="decimal" step="any" value="0.5" oninput="calculate()" />
-          </div>
-          <div  style="display:none;">
-            <label for="fixedRisk">Fixed $ risk override</label>
-            <input id="fixedRisk" type="number" inputmode="decimal" step="any" placeholder="optional" oninput="calculate()" />
-          </div>
-          <div  style="display:none;">
             <label for="manualLots">Manual lots override</label>
-            <input id="manualLots" type="number" inputmode="decimal" step="any" placeholder="optional" oninput="calculate()" />
+            <input id="manualLots" type="number" inputmode="decimal" step="any" placeholder="optional"
+              oninput="calculate()" />
           </div>
         </div>
       </div>
@@ -480,7 +517,8 @@
           <button class="primary" onclick="saveProfile()">Save profile</button>
           <button onclick="clearProfileForm()">Clear</button>
         </div>
-        <div class="note">Copy these from MT5: right-click symbol → Specification. Tick value should be for 1 lot in your account/profit currency.</div>
+        <div class="note">Copy these from MT5: right-click symbol → Specification. Tick value should be for 1 lot in
+          your account/profit currency.</div>
       </div>
 
       <div class="card">
@@ -510,39 +548,159 @@
 
     const defaultProfiles = [
       {
+        symbol: 'BTCUSD',
+        displayName: 'BTCUSD',
+        contractSize: 1,
+        tickSize: 0.01,
+        tickValue: 0.01,
+        minLot: 0.01,
+        maxLot: 5,
+        lotStep: 0.01,
+        leverage: 30,
+        commissionPerLot: 0
+      },
+      {
+        symbol: 'ETHUSD',
+        displayName: 'ETHUSD',
+        contractSize: 10,
+        tickSize: 0.01,
+        tickValue: 0.1,
+        minLot: 0.01,
+        maxLot: 5,
+        lotStep: 0.01,
+        leverage: 30,
+        commissionPerLot: 0
+      },
+      {
         symbol: 'XAUUSD',
-        displayName: 'Gold example',
+        displayName: 'XAUUSD',
         contractSize: 100,
         tickSize: 0.01,
         tickValue: 1,
         minLot: 0.01,
-        maxLot: 50,
+        maxLot: 100,
         lotStep: 0.01,
-        leverage: 100,
+        leverage: 30,
         commissionPerLot: 0
       },
       {
-        symbol: 'BTCUSD',
-        displayName: 'Bitcoin example',
-        contractSize: 1,
-        tickSize: 1,
-        tickValue: 1,
+        symbol: 'XAGUSD',
+        displayName: 'XAGUSD',
+        contractSize: 5000,
+        tickSize: 0.001,
+        tickValue: 5,
         minLot: 0.01,
         maxLot: 100,
         lotStep: 0.01,
-        leverage: 10,
+        leverage: 30,
         commissionPerLot: 0
       },
       {
-        symbol: 'US100',
-        displayName: 'Nasdaq example',
+        symbol: 'US100.cash',
+        displayName: 'US100.cash',
         contractSize: 1,
-        tickSize: 0.1,
+        tickSize: 0.01,
+        tickValue: 0.01,
+        minLot: 0.01,
+        maxLot: 1000,
+        lotStep: 0.01,
+        leverage: 30,
+        commissionPerLot: 0
+      },
+      {
+        symbol: 'US500.cash',
+        displayName: 'US500.cash',
+        contractSize: 1,
+        tickSize: 0.01,
+        tickValue: 0.01,
+        minLot: 0.01,
+        maxLot: 1000,
+        lotStep: 0.01,
+        leverage: 30,
+        commissionPerLot: 0
+      },
+      {
+        symbol: 'DXY.cash',
+        displayName: 'DXY.cash',
+        contractSize: 100,
+        tickSize: 0.001,
         tickValue: 0.1,
         minLot: 0.01,
-        maxLot: 100,
+        maxLot: 1000,
         lotStep: 0.01,
-        leverage: 100,
+        leverage: 30,
+        commissionPerLot: 0
+      },
+      {
+        symbol: 'AUDUSD',
+        displayName: 'AUDUSD',
+        contractSize: 100000,
+        tickSize: 0.00001,
+        tickValue: 1,
+        minLot: 0.01,
+        maxLot: 50,
+        lotStep: 0.01,
+        leverage: 30,
+        commissionPerLot: 0
+      },
+      {
+        symbol: 'USOIL.cash',
+        displayName: 'USOIL.cash',
+        contractSize: 100,
+        tickSize: 0.001,
+        tickValue: 0.1,
+        minLot: 0.01,
+        maxLot: 1000,
+        lotStep: 0.01,
+        leverage: 30,
+        commissionPerLot: 0
+      },
+      {
+        symbol: 'AMD',
+        displayName: 'AMD',
+        contractSize: 1,
+        tickSize: 0.01,
+        tickValue: 0.01,
+        minLot: 1,
+        maxLot: 10000,
+        lotStep: 1,
+        leverage: 30,
+        commissionPerLot: 0
+      },
+      {
+        symbol: 'MSFT',
+        displayName: 'MSFT',
+        contractSize: 1,
+        tickSize: 0.01,
+        tickValue: 0.01,
+        minLot: 1,
+        maxLot: 10000,
+        lotStep: 1,
+        leverage: 30,
+        commissionPerLot: 0
+      },
+      {
+        symbol: 'INTC',
+        displayName: 'INTC',
+        contractSize: 1,
+        tickSize: 0.01,
+        tickValue: 0.01,
+        minLot: 1,
+        maxLot: 10000,
+        lotStep: 1,
+        leverage: 30,
+        commissionPerLot: 0
+      },
+      {
+        symbol: 'NVDA',
+        displayName: 'NVDA',
+        contractSize: 1,
+        tickSize: 0.01,
+        tickValue: 0.01,
+        minLot: 1,
+        maxLot: 10000,
+        lotStep: 1,
+        leverage: 30,
         commissionPerLot: 0
       }
     ];
@@ -586,16 +744,16 @@
         const raw = localStorage.getItem(INPUT_KEY);
         if (!raw) return;
         const data = JSON.parse(raw);
-        ['entry','stop','takeProfit','commission','accountSize','riskPercent','fixedRisk','manualLots','symbolSelect'].forEach(id => {
+        ['entry', 'stop', 'takeProfit', 'commission', 'accountSize', 'riskPercent', 'fixedRisk', 'manualLots', 'symbolSelect'].forEach(id => {
           if (data[id] !== undefined && $(id)) $(id).value = data[id];
         });
         if (data.direction) setDirection(data.direction, false);
-      } catch {}
+      } catch { }
     }
 
     function saveInputs() {
       const data = {};
-      ['entry','stop','takeProfit','commission','accountSize','riskPercent','fixedRisk','manualLots','symbolSelect'].forEach(id => {
+      ['entry', 'stop', 'takeProfit', 'commission', 'accountSize', 'riskPercent', 'fixedRisk', 'manualLots', 'symbolSelect'].forEach(id => {
         if ($(id)) data[id] = $(id).value;
       });
       data.direction = direction;
@@ -687,6 +845,10 @@
       const margin = p.leverage > 0 ? notional / p.leverage : NaN;
       const riskPctActual = accountSize > 0 ? actualRisk / accountSize * 100 : NaN;
 
+      if (manualLots && manualLots > 0 && Number.isFinite(riskPctActual)) {
+        $('riskPercent').value = Number(riskPctActual.toFixed(4));
+      }
+
       let rMultiple = NaN;
       let estimatedProfit = NaN;
       let rewardTicks = NaN;
@@ -768,7 +930,7 @@
         commissionPerLot: parseFloat($('profileCommission').value) || 0
       };
 
-      const required = ['symbol','contractSize','tickSize','tickValue','minLot','maxLot','lotStep','leverage'];
+      const required = ['symbol', 'contractSize', 'tickSize', 'tickValue', 'minLot', 'maxLot', 'lotStep', 'leverage'];
       const invalid = required.some(key => {
         if (key === 'symbol') return !profile.symbol;
         return !Number.isFinite(profile[key]) || profile[key] <= 0;
@@ -948,7 +1110,7 @@
     }
 
     function clearProfileForm() {
-      ['profileSymbol','profileName','contractSize','tickSize','tickValue','minLot','maxLot','lotStep','leverage','profileCommission'].forEach(id => $(id).value = '');
+      ['profileSymbol', 'profileName', 'contractSize', 'tickSize', 'tickValue', 'minLot', 'maxLot', 'lotStep', 'leverage', 'profileCommission'].forEach(id => $(id).value = '');
     }
 
     function exportProfiles() {
@@ -981,16 +1143,17 @@
     document.addEventListener('input', event => {
       if (event.target.closest('#calcView')) saveInputs();
     });
-	if ('serviceWorker' in navigator) {
-		window.addEventListener('load', () => {
-			navigator.serviceWorker.register('service-worker.js')
-			.catch(error => console.log('Service worker registration failed:', error));
-		});
-	}
-	
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js')
+          .catch(error => console.log('Service worker registration failed:', error));
+      });
+    }
+
     loadProfiles();
     loadInputs();
     calculate();
   </script>
 </body>
+
 </html>
