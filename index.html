@@ -415,8 +415,11 @@
             <label for="accountSize">Account size</label>
             <input id="accountSize" type="number" inputmode="decimal" step="any" value="200000" oninput="calculate()" />
           </div>
-          <input id="riskPercent" type="number" inputmode="decimal" step="any" value="0.5"
-            oninput="$('manualLots').value=''; calculate()" />
+          <div>
+            <label for="riskPercent">Risk %</label>
+            <input id="riskPercent" type="number" inputmode="decimal" step="any" value="0.5"
+              oninput="$('manualLots').value=''; calculate()" />
+          </div>
           <div style="display:none;">
             <label for="fixedRisk">Fixed $ risk override</label>
             <input id="fixedRisk" type="number" inputmode="decimal" step="any" placeholder="optional"
